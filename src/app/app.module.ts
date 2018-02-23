@@ -4,27 +4,49 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
+// service
+import {NotesServices} from '../services/notes.services';
+// pages
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+
+import { DetailPage } from '../pages/detail/detail';
+
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyCpTTC60cKaQ2K_N4XX2GUWGJeyYjKcBX4",
+  authDomain: "notiionic.firebaseapp.com",
+  databaseURL: "https://notiionic.firebaseio.com",
+  storageBucket: "notiionic.appspot.com",
+  messagingSenderId: '478996604377'
+};
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage, DetailPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage, DetailPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    NotesServices,
+    AngularFireDatabase,
   ]
 })
 export class AppModule {}
