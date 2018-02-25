@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {NotesServices} from '../../services/notes.services';
-/**
- * Generated class for the DetailPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import {HomePage} from "../home/home";
 
 @IonicPage()
 @Component({
@@ -14,16 +9,19 @@ import {NotesServices} from '../../services/notes.services';
   templateUrl: 'detail.html',
 })
 export class DetailPage {
-  note = {
-    id: '',
-    title: '',
-    description: ''
-  };
+  note: any = {description: null, id: null, title: null };
   id= null;
   constructor(public navCtrl: NavController, public navParams: NavParams, public notesService: NotesServices) {
     this.id = this.navParams.get('id');
+
     if(this.id !== 0){
-      this.note = notesService.getNote(this.id);
+      this.notesService.getNote(this.id).subscribe(
+        notes => {
+          this.note = notes;
+        //  console.log('llego');
+          //console.log(this.note.title);
+        }
+      );
     }
 
   }
@@ -36,7 +34,7 @@ export class DetailPage {
       this.notesService.editNote(this.note);
       this.navCtrl.pop();
     } else {
-      //this.note.id = Date.now();
+      this.note.id = Date.now();
       this.notesService.createNote(this.note);
       this.navCtrl.pop();
     }
@@ -44,6 +42,6 @@ export class DetailPage {
   }
   deleteNote(){
     this.notesService.deleteNote(this.note);
-    this.navCtrl.pop();
+    this.navCtrl.push(HomePage);
   }
 }
